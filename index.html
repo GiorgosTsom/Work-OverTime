@@ -499,6 +499,7 @@
             overflow-x: auto;
             scrollbar-width: none;
             -ms-overflow-style: none;
+            scroll-behavior: smooth;
         }
         
         .month-tabs-container::-webkit-scrollbar {
@@ -1186,9 +1187,16 @@
         .container {
             max-width: 480px;
             margin: 0 auto;
-            padding: 24px 20px;
+            padding: 24px 28px;
             padding-top: max(24px, env(safe-area-inset-top) + 8px);
             padding-bottom: max(32px, env(safe-area-inset-bottom) + 16px);
+        }
+        
+        @media (min-width: 481px) {
+            .container {
+                padding-left: 32px;
+                padding-right: 32px;
+            }
         }
         
         .card-spacing {
@@ -1599,8 +1607,10 @@
                 tabsContainer.appendChild(button);
             });
             
-            // Position indicator initially
-            updateTabIndicator();
+            // Position indicator initially with delay to ensure DOM is ready
+            setTimeout(() => {
+                updateTabIndicator();
+            }, 100);
         }
         
         function selectMonth(monthIndex) {
@@ -1628,14 +1638,31 @@
             
             if (activeTab) {
                 const container = document.getElementById('monthTabs');
-                const containerRect = container.getBoundingClientRect();
-                const tabRect = activeTab.getBoundingClientRect();
                 
-                const left = tabRect.left - containerRect.left;
-                const width = tabRect.width;
+                // Scroll the active tab into view smoothly
+                activeTab.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest', 
+                    inline: 'center' 
+                });
                 
-                indicator.style.width = `${width}px`;
-                indicator.style.left = `${left}px`;
+                // Calculate position after scroll
+                setTimeout(() => {
+                    // Get positions relative to container
+                    const tabs = Array.from(document.querySelectorAll('.month-tab'));
+                    const activeIndex = tabs.indexOf(activeTab);
+                    
+                    // Calculate left position by summing widths of previous tabs
+                    let left = 5; // Initial padding
+                    for (let i = 0; i < activeIndex; i++) {
+                        left += tabs[i].offsetWidth;
+                    }
+                    
+                    const width = activeTab.offsetWidth;
+                    
+                    indicator.style.width = `${width}px`;
+                    indicator.style.left = `${left}px`;
+                }, 200);
             }
         }
         
