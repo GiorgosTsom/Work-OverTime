@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="el-GR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Overtime Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ============================================
+           PREMIUM DESIGN SYSTEM - WORLD CLASS UI
+           ============================================ */
+        
+        /* Elegant serif font for headers + refined sans-serif */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+        
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            /* Current theme colors - will be overridden by theme selection */
+            --color-primary: #059669;
+            --color-primary-light: #10b981;
+            --color-primary-dark: #047857;
+            --color-accent: #6ee7b7;
+            
+            /* Refined neutrals */
+            --color-bg-primary: #f8fafb;
+            --color-bg-secondary: #ffffff;
+            --color-surface: rgba(255, 255, 255, 0.92);
+            --color-overlay: rgba(255, 255, 255, 0.75);
+            
+            /* Text hierarchy */
+            --color-text-primary: #0f172a;
+            --color-text-secondary: #475569;
+            --color-text-tertiary: #94a3b8;
+            --color-text-inverse: #ffffff;
+            
+            /* Borders & dividers */
+            --color-border-light: rgba(148, 163, 184, 0.12);
+            --color-border-medium: rgba(148, 163, 184, 0.2);
+            
+            /* Premium shadows with multiple layers */
+            --shadow-xs: 0 1px 3px rgba(15, 23, 42, 0.03);
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.03);
+            --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.06), 0 2px 8px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 8px 24px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(15, 23, 42, 0.05);
+            --shadow-xl: 0 16px 48px rgba(15, 23, 42, 0.12), 0 8px 24px rgba(15, 23, 42, 0.08);
+            --shadow-glow: 0 0 32px rgba(16, 185, 129, 0.15);
+            
+            /* Refined border radius scale */
+            --radius-xs: 8px;
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
+            --radius-2xl: 32px;
+            
+            /* Smooth transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-smooth: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        /* ============================================
+           COLOR THEMES - STUNNING PALETTES
+           ============================================ */
+        
+        /* Theme 1: Emerald Elegance (Default) */
+        [data-theme="emerald"] {
+            --color-primary: #059669;
+            --color-primary-light: #10b981;
+            --color-primary-dark: #047857;
+            --color-accent: #6ee7b7;
+            --shadow-glow: 0 0 32px rgba(5, 150, 105, 0.15);
+        }
+        
+        /* Theme 2: Royal Purple */
+        [data-theme="purple"] {
+            --color-primary: #7c3aed;
+            --color-primary-light: #8b5cf6;
+            --color-primary-dark: #6d28d9;
+            --color-accent: #c4b5fd;
+            --shadow-glow: 0 0 32px rgba(124, 58, 237, 0.2);
+        }
+        
+        /* Theme 3: Ocean Blue */
+        [data-theme="ocean"] {
+            --color-primary: #0284c7;
+            --color-primary-light: #0ea5e9;
+            --color-primary-dark: #0369a1;
+            --color-accent: #7dd3fc;
+            --shadow-glow: 0 0 32px rgba(2, 132, 199, 0.2);
+        }
+        
+        /* Theme 4: Sunset Orange */
+        [data-theme="sunset"] {
+            --color-primary: #ea580c;
+            --color-primary-light: #f97316;
+            --color-primary-dark: #c2410c;
+            --color-accent: #fdba74;
+            --shadow-glow: 0 0 32px rgba(234, 88, 12, 0.2);
+        }
+        
+        /* Theme 5: Rose Pink */
+        [data-theme="rose"] {
+            --color-primary: #e11d48;
+            --color-primary-light: #f43f5e;
+            --color-primary-dark: #be123c;
+            --color-accent: #fda4af;
+            --shadow-glow: 0 0 32px rgba(225, 29, 72, 0.2);
+        }
+        
+        /* Theme 6: Midnight Blue */
+        [data-theme="midnight"] {
+            --color-primary: #1e40af;
+            --color-primary-light: #3b82f6;
+            --color-primary-dark: #1e3a8a;
+            --color-accent: #93c5fd;
+            --shadow-glow: 0 0 32px rgba(30, 64, 175, 0.2);
+        }
+        
+        /* Theme 7: Amber Gold */
+        [data-theme="amber"] {
+            --color-primary: #d97706;
+            --color-primary-light: #f59e0b;
+            --color-primary-dark: #b45309;
+            --color-accent: #fcd34d;
+            --shadow-glow: 0 0 32px rgba(217, 119, 6, 0.2);
+        }
+        
+        /* Theme 8: Teal Fresh */
+        [data-theme="teal"] {
+            --color-primary: #0d9488;
+            --color-primary-light: #14b8a6;
+            --color-primary-dark: #0f766e;
+            --color-accent: #5eead4;
+            --shadow-glow: 0 0 32px rgba(13, 148, 136, 0.2);
+        }
+        
+        /* Theme 9: Luxurious Gold */
+        [data-theme="gold"] {
+            --color-primary: #d97706;
+            --color-primary-light: #fbbf24;
+            --color-primary-dark: #b45309;
+            --color-accent: #fde047;
+            --shadow-glow: 0 0 32px rgba(251, 191, 36, 0.25);
+        }
+        
+        /* Theme button in header */
+        .themes-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--color-surface);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1.5px solid var(--color-border-medium);
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+            z-index: 100;
+        }
+        
+        .themes-button:hover {
+            border-color: var(--color-primary);
+            color: var(--color-primary);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .themes-button-icon {
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+            border-radius: 50%;
+            transition: transform var(--transition-base);
+        }
+        
+        .themes-button:hover .themes-button-icon {
+            transform: rotate(180deg);
+        }
+        
+        /* Theme modal */
+        .theme-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-base);
+        }
+        
+        .theme-modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .theme-modal {
+            background: var(--color-surface);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid var(--color-border-light);
+            border-radius: var(--radius-2xl);
+            padding: 32px;
+            box-shadow: var(--shadow-xl);
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9) translateY(20px);
+            transition: transform var(--transition-smooth);
+        }
+        
+        .theme-modal-overlay.active .theme-modal {
+            transform: scale(1) translateY(0);
+        }
+        
+        .theme-modal-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        
+        .theme-modal-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.01em;
+        }
+        
+        .theme-modal-subtitle {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+        
+        .theme-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        
+        .theme-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .theme-option {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: var(--radius-md);
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+            background: none;
+            padding: 0;
+        }
+        
+        .theme-option::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--theme-color-1) 0%, var(--theme-color-2) 100%);
+        }
+        
+        .theme-option:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .theme-option:active {
+            transform: scale(1.02);
+        }
+        
+        .theme-option.active {
+            border-color: white;
+            box-shadow: 0 0 0 3px var(--theme-color-1), 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+        
+        .theme-option.active::after {
+            content: '✓';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 24px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            z-index: 1;
+        }
+        
+        .theme-label {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Individual theme button colors */
+        .theme-emerald { --theme-color-1: #10b981; --theme-color-2: #047857; }
+        .theme-purple { --theme-color-1: #8b5cf6; --theme-color-2: #6d28d9; }
+        .theme-ocean { --theme-color-1: #0ea5e9; --theme-color-2: #0369a1; }
+        .theme-sunset { --theme-color-1: #f97316; --theme-color-2: #c2410c; }
+        .theme-rose { --theme-color-1: #f43f5e; --theme-color-2: #be123c; }
+        .theme-midnight { --theme-color-1: #3b82f6; --theme-color-2: #1e3a8a; }
+        .theme-amber { --theme-color-1: #f59e0b; --theme-color-2: #b45309; }
+        .theme-teal { --theme-color-1: #14b8a6; --theme-color-2: #0f766e; }
+        .theme-gold { --theme-color-1: #fbbf24; --theme-color-2: #d97706; }
+        
+        @media (max-width: 640px) {
+            .themes-button {
+                top: 12px;
+                right: 12px;
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+            
+            .theme-modal {
+                padding: 24px;
+            }
+            
+            .theme-grid {
+                gap: 12px;
+            }
+        }
+        
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: linear-gradient(180deg, #f1f5f9 0%, #e2e8f0 100%);
+            min-height: 100vh;
+            color: var(--color-text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Animated gradient mesh background */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(16, 185, 129, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.06) 0%, transparent 60%);
+            pointer-events: none;
+            animation: bgMesh 25s ease-in-out infinite;
+        }
+        
+        @keyframes bgMesh {
+            0%, 100% { opacity: 0.5; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+        
+        /* Noise texture overlay for depth */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        
+        /* Sophisticated glass-morphism */
+        .glass-card {
+            background: var(--color-surface);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 1px solid var(--color-border-light);
+            box-shadow: var(--shadow-md);
+            border-radius: var(--radius-xl);
+            transition: all var(--transition-base);
+            position: relative;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-xl);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+        
+        .glass-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            border-color: rgba(16, 185, 129, 0.15);
+        }
+        
+        /* Premium header with serif typography */
+        .app-header {
+            text-align: center;
+            margin-bottom: 36px;
+        }
+        
+        .app-title {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 56px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 50%, var(--color-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            margin-bottom: 8px;
+            animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .app-subtitle {
+            font-size: 15px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            letter-spacing: 0.01em;
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+        }
+        
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Refined month tabs - iOS style */
+        .month-tab {
+            position: relative;
+            padding: 14px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text-tertiary);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            flex: 1;
+            text-align: center;
+            z-index: 1;
+            letter-spacing: 0.01em;
+        }
+        
+        .month-tab.active {
+            color: white;
+        }
+        
+        .month-tab:not(.active):hover {
+            color: var(--color-text-secondary);
+        }
+        
+        .month-tabs-container {
+            position: relative;
+            display: flex;
+            background: rgba(148, 163, 184, 0.08);
+            border-radius: var(--radius-md);
+            padding: 5px;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        
+        .month-tabs-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .month-tab-indicator {
+            position: absolute;
+            height: calc(100% - 10px);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-smooth);
+            top: 5px;
+            box-shadow: 0 4px 16px rgba(5, 150, 105, 0.25), 0 2px 8px rgba(5, 150, 105, 0.15);
+        }
+        
+        /* Luxurious summary card */
+        .summary-card {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+            color: white;
+            border-radius: var(--radius-2xl);
+            padding: 40px 32px;
+            box-shadow: var(--shadow-xl), var(--shadow-glow);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Floating orbs for depth */
+        .summary-card::before,
+        .summary-card::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+            animation: float 10s ease-in-out infinite;
+        }
+        
+        .summary-card::before {
+            width: 280px;
+            height: 280px;
+            top: -30%;
+            right: -15%;
+            animation-delay: 0s;
+        }
+        
+        .summary-card::after {
+            width: 200px;
+            height: 200px;
+            bottom: -20%;
+            left: -10%;
+            animation-delay: 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+        
+        .summary-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .summary-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.85;
+        }
+        
+        .year-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .year-nav-btn {
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            color: white;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        
+        .year-nav-btn:hover {
+            background: rgba(255, 255, 255, 0.28);
+            transform: scale(1.08);
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+        
+        .year-nav-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .year-display {
+            font-size: 17px;
+            font-weight: 700;
+            min-width: 60px;
+            text-align: center;
+            letter-spacing: 0.02em;
+        }
+        
+        .earnings-display {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: 64px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin: 12px 0;
+            text-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            animation: scaleIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            z-index: 1;
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.85);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .summary-stats {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 28px;
+            padding-top: 28px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-item {
+            flex: 1;
+        }
+        
+        .stat-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            opacity: 0.75;
+            margin-bottom: 6px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Elegant form design */
+        .form-card {
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+        }
+        
+        .form-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 28px;
+            letter-spacing: -0.01em;
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .label-text {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-bottom: 10px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 16px 18px;
+            border: 1.5px solid var(--color-border-medium);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 500;
+            background: white;
+            color: var(--color-text-primary);
+            transition: all var(--transition-base);
+            -webkit-appearance: none;
+            font-family: inherit;
+        }
+        
+        /* Force 24-hour time input display */
+        input[type="time"]::-webkit-datetime-edit-ampm-field {
+            display: none;
+        }
+        
+        input[type="time"] {
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+        }
+        
+        .input-field:hover {
+            border-color: rgba(5, 150, 105, 0.3);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.08), var(--shadow-sm);
+            background: white;
+        }
+        
+        textarea.input-field {
+            resize: none;
+            line-height: 1.6;
+            min-height: 100px;
+        }
+        
+        /* Premium button with gradient */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 18px 32px;
+            border-radius: var(--radius-md);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(5, 150, 105, 0.25), 0 2px 8px rgba(5, 150, 105, 0.15);
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.02em;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 6px 24px rgba(5, 150, 105, 0.35), 0 3px 12px rgba(5, 150, 105, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:hover::before {
+            opacity: 1;
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0) scale(0.98);
+            box-shadow: 0 2px 12px rgba(5, 150, 105, 0.3);
+        }
+        
+        /* Ripple effect */
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-primary:active::after {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Refined entry cards */
+        .entries-section {
+            animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 20px;
+            padding: 0 6px;
+            letter-spacing: -0.01em;
+        }
+        
+        .entry-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+            border: 1px solid var(--color-border-light);
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .entry-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+            border-color: rgba(5, 150, 105, 0.15);
+        }
+        
+        .entry-card:active {
+            transform: scale(0.99);
+        }
+        
+        .entry-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        .entry-date {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+        
+        .entry-time {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-text-tertiary);
+            padding: 4px 10px;
+            background: rgba(148, 163, 184, 0.08);
+            border-radius: var(--radius-xs);
+        }
+        
+        .client-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.08) 100%);
+            color: var(--color-primary-dark);
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            margin-bottom: 10px;
+            border: 1px solid rgba(16, 185, 129, 0.15);
+        }
+        
+        .entry-description {
+            font-size: 14px;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+        
+        .entry-footer {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .entry-hours {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .entry-earnings {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--color-text-primary);
+        }
+        
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.08);
+            color: #dc2626;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            margin-left: auto;
+        }
+        
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.15);
+            transform: scale(1.08);
+            border-color: rgba(239, 68, 68, 0.25);
+        }
+        
+        .delete-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Beautiful empty state */
+        .empty-state {
+            text-align: center;
+            padding: 72px 24px;
+        }
+        
+        .empty-state-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+            filter: grayscale(1);
+        }
+        
+        .empty-state-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .empty-state-text {
+            font-size: 14px;
+            color: var(--color-text-tertiary);
+        }
+        
+        /* Smooth scrolling */
+        .overflow-container {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+        }
+        
+        .overflow-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .overflow-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .overflow-container::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.25);
+            border-radius: 3px;
+        }
+        
+        .overflow-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(148, 163, 184, 0.35);
+        }
+        
+        /* Text utilities */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        /* Overnight travel toggle switch */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 18px;
+            background: rgba(16, 185, 129, 0.05);
+            border: 1.5px solid rgba(16, 185, 129, 0.15);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            margin-bottom: 16px;
+        }
+        
+        .toggle-container:hover {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.25);
+        }
+        
+        .toggle-label-wrapper {
+            flex: 1;
+        }
+        
+        .toggle-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+        
+        .toggle-sublabel {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 52px;
+            height: 28px;
+            background: rgba(148, 163, 184, 0.25);
+            border-radius: 14px;
+            transition: all var(--transition-base);
+            flex-shrink: 0;
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+            transition: all var(--transition-smooth);
+        }
+        
+        .toggle-container.active .toggle-switch {
+            background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-primary) 100%);
+        }
+        
+        .toggle-container.active .toggle-switch::after {
+            left: 27px;
+        }
+        
+        /* Night counter */
+        .night-counter-wrapper {
+            padding: 16px 18px;
+            background: rgba(59, 130, 246, 0.06);
+            border: 1.5px solid rgba(59, 130, 246, 0.15);
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all var(--transition-base);
+        }
+        
+        .night-counter-wrapper.visible {
+            opacity: 1;
+            max-height: 120px;
+            margin-bottom: 24px;
+        }
+        
+        .night-counter-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 12px;
+        }
+        
+        .night-counter-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .night-btn {
+            flex: 1;
+            min-width: 60px;
+            padding: 12px 16px;
+            background: white;
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-align: center;
+        }
+        
+        .night-btn:hover {
+            border-color: rgba(59, 130, 246, 0.4);
+            background: rgba(59, 130, 246, 0.05);
+            transform: translateY(-1px);
+        }
+        
+        .night-btn.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            border-color: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .night-btn.active:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* Owner name under title */
+        .app-owner {
+            font-size: 17px;
+            color: var(--color-text-secondary);
+            font-weight: 700;
+            margin-top: 6px;
+            margin-bottom: 2px;
+            letter-spacing: 0.01em;
+        }
+        
+        /* Travel badge in entry cards */
+        .travel-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(37, 99, 235, 0.1) 100%);
+            color: #2563eb;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        /* Enhanced summary stats for travel */
+        .stat-divider {
+            width: 1px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .stat-item-small {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .stat-value-small {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+        
+        /* Success animation */
+        @keyframes successPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+            100% { transform: scale(1); }
+        }
+        
+        .success-pulse {
+            animation: successPulse 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+            to {
+                opacity: 0.88;
+                transform: scale(1);
+            }
+        }
+        
+        /* Responsive spacing */
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 24px 20px;
+            padding-top: max(24px, env(safe-area-inset-top) + 8px);
+            padding-bottom: max(32px, env(safe-area-inset-bottom) + 16px);
+        }
+        
+        .card-spacing {
+            margin-bottom: 20px;
+        }
+        
+        .entries-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+    </style>
+</head>
+<body data-theme="emerald">
+    <!-- Background effects -->
+    <div class="bg-pattern"></div>
+    
+    <!-- Themes Button in Header -->
+    <button class="themes-button" onclick="openThemeModal()">
+        <div class="themes-button-icon"></div>
+        <span>Themes</span>
+    </button>
+    
+    <!-- Theme Modal -->
+    <div class="theme-modal-overlay" id="themeModal" onclick="closeThemeModal(event)">
+        <div class="theme-modal" onclick="event.stopPropagation()">
+            <div class="theme-modal-header">
+                <h3 class="theme-modal-title">Choose Your Style</h3>
+                <p class="theme-modal-subtitle">Select a color theme that inspires you</p>
+            </div>
+            
+            <div class="theme-grid">
+                <div class="theme-item">
+                    <button type="button" class="theme-option theme-emerald active" data-theme="emerald">
+                    </button>
+                    <div class="theme-label">Emerald</div>
+                </div>
+                <div class="theme-item">
+                    <button type="button" class="theme-option theme-purple" data-theme="purple">
+                    </button>
+                    <div class="theme-label">Purple</div>
+                </div>
+                <div class="theme-item">
+                    <button type="button" class="theme-option theme-ocean" data-theme="ocean">
+                    </button>
+                    <div class="theme-label">Ocean</div>
+                </div>
+                <div class="theme-item">
+                    <button type="button" class="theme-option theme-sunset" data-theme="sunset">
+                    </button>
+                    <div class="theme-label">Sunset</div>
+                </div>
+                <div class="theme-item">
+                    <button type="button" class="theme-option theme-rose" data-theme="rose">
+                    </button>
+                    <div class="theme-label">Rose</div>
+                </div>
+                <div class="theme-item">
+                    <button type="button" class="theme-option theme-midnight" data-theme="midnight">
+                    </button>
+                    <div class="theme-label">Midnight</div>
+                </div>
+                <div class="theme-item">
+                    <button type="button" class="theme-option theme-amber" data-theme="amber">
+                    </button>
+                    <div class="theme-label">Amber</div>
+                </div>
+                <div class="theme-item">
+                    <button type="button" class="theme-option theme-teal" data-theme="teal">
+                    </button>
+                    <div class="theme-label">Teal</div>
+                </div>
+                <div class="theme-item">
+                    <button type="button" class="theme-option theme-gold" data-theme="gold">
+                    </button>
+                    <div class="theme-label">Gold</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Main container -->
+    <div class="container">
+        
+        <!-- ============================================
+             HEADER
+             ============================================ -->
+        <header class="app-header">
+            <h1 class="app-title">Overtime</h1>
+            <p class="app-owner">George Tsom</p>
+            <p class="app-subtitle">Track your extra hours with elegance</p>
+        </header>
+        
+        <!-- ============================================
+             MONTH SELECTOR
+             ============================================ -->
+        <div class="glass-card card-spacing" style="padding: 6px;">
+            <div class="month-tabs-container" id="monthTabs">
+                <div class="month-tab-indicator" id="tabIndicator"></div>
+                <!-- Month tabs generated by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- ============================================
+             SUMMARY CARD
+             ============================================ -->
+        <div class="summary-card card-spacing">
+                <div class="summary-header">
+                    <p class="summary-label">Monthly Earnings</p>
+                    <div class="year-selector">
+                        <button onclick="changeYear(-1)" class="year-nav-btn" aria-label="Previous year">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <span class="year-display" id="yearDisplay">2026</span>
+                        <button onclick="changeYear(1)" class="year-nav-btn" aria-label="Next year">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="earnings-display" id="totalEarnings">€0.00</div>
+                
+                <div class="summary-stats">
+                    <div class="stat-item-small">
+                        <p class="stat-label">Overtime</p>
+                        <p class="stat-value-small" id="overtimeEarnings">€0</p>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item-small">
+                        <p class="stat-label">Travel</p>
+                        <p class="stat-value-small" id="travelEarnings">€0</p>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item-small">
+                        <p class="stat-label">Hours</p>
+                        <p class="stat-value-small" id="totalHours">0.00</p>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-item-small">
+                        <p class="stat-label">Rate</p>
+                        <p class="stat-value-small">€10/hr</p>
+                    </div>
+                </div>
+        </div>
+        
+        <!-- ============================================
+             ADD ENTRY FORM
+             ============================================ -->
+        <div class="glass-card form-card card-spacing" style="padding: 32px 28px;">
+            <h2 class="form-title">Add Overtime Entry</h2>
+            
+            <form id="overtimeForm">
+                <div class="form-group">
+                    <label class="label-text">Date</label>
+                    <input 
+                        type="date" 
+                        id="entryDate" 
+                        class="input-field"
+                        required
+                    >
+                    <div style="font-size: 11px; color: var(--color-text-tertiary); margin-top: 6px;">
+                        Format: DD/MM/YYYY
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                    <div>
+                        <label class="label-text">Start Time</label>
+                        <input 
+                            type="time" 
+                            id="startTime" 
+                            class="input-field"
+                            required
+                        >
+                        <div style="font-size: 11px; color: var(--color-text-tertiary); margin-top: 6px;">
+                            24-hour format
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label-text">End Time</label>
+                        <input 
+                            type="time" 
+                            id="endTime" 
+                            class="input-field"
+                            required
+                        >
+                        <div style="font-size: 11px; color: var(--color-text-tertiary); margin-top: 6px;">
+                            24-hour format
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="label-text">Client / Partner Name</label>
+                    <input 
+                        type="text" 
+                        id="clientName" 
+                        class="input-field"
+                        placeholder="e.g. Tom & Wendy, AL321"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label class="label-text">Description</label>
+                    <textarea 
+                        id="description" 
+                        class="input-field"
+                        placeholder="e.g. Airport pickup, Hotel transfer"
+                        required
+                    ></textarea>
+                </div>
+                
+                <div class="toggle-container" id="travelToggle" onclick="toggleTravel()">
+                    <div class="toggle-label-wrapper">
+                        <div class="toggle-label">🌙 Overnight Travel</div>
+                        <div class="toggle-sublabel">+€50 per night away</div>
+                    </div>
+                    <div class="toggle-switch"></div>
+                </div>
+                
+                <div class="night-counter-wrapper" id="nightCounter">
+                    <div class="night-counter-label">Number of Nights</div>
+                    <div class="night-counter-buttons">
+                        <button type="button" class="night-btn active" data-nights="1" onclick="selectNights(1)">×1</button>
+                        <button type="button" class="night-btn" data-nights="2" onclick="selectNights(2)">×2</button>
+                        <button type="button" class="night-btn" data-nights="3" onclick="selectNights(3)">×3</button>
+                        <button type="button" class="night-btn" data-nights="4" onclick="selectNights(4)">×4</button>
+                        <button type="button" class="night-btn" data-nights="5" onclick="selectNights(5)">×5</button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn-primary" id="addButton" style="width: 100%;">
+                    Add Entry
+                </button>
+            </form>
+        </div>
+        
+        <!-- ============================================
+             ENTRIES LIST
+             ============================================ -->
+        <div class="glass-card entries-section" style="padding: 28px 24px;">
+            <h2 class="section-title">Recent Entries</h2>
+            <div id="entriesList" class="entries-list overflow-container" style="max-height: 500px;">
+                <!-- Entries will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- ============================================
+         JAVASCRIPT - Application Logic
+         ============================================ -->
+    <script>
+        // ============================================
+        // DATA & STATE MANAGEMENT
+        // ============================================
+        
+        const MONTHS = [
+            'January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
+        
+        const HOURLY_RATE = 10; // €10 per hour
+        const TRAVEL_RATE = 50; // €50 per night
+        
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+        let isTravelEnabled = false; // Track travel toggle state
+        let numberOfNights = 1; // Default to 1 night
+        
+        // ============================================
+        // INITIALIZATION
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Initializing app...'); // Debug log
+            
+            try {
+                loadTheme();
+                initializeMonthTabs();
+                setDefaultDate();
+                updateYearDisplay();
+                loadAndDisplayEntries();
+                
+                // Event listeners
+                const form = document.getElementById('overtimeForm');
+                if (form) {
+                    form.addEventListener('submit', handleFormSubmit);
+                    console.log('Form event listener attached successfully!'); // Debug log
+                } else {
+                    console.error('Form element not found!');
+                }
+                
+                // Add click listeners to all theme buttons
+                document.querySelectorAll('.theme-option').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const themeName = this.getAttribute('data-theme');
+                        selectTheme(themeName);
+                    });
+                });
+                
+                // Keyboard support for modal
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        closeThemeModal({ target: { id: 'themeModal' } });
+                    }
+                });
+                
+                console.log('App initialized successfully!'); // Debug log
+            } catch (error) {
+                console.error('Initialization error:', error);
+            }
+        });
+        
+        // ============================================
+        // THEME MANAGEMENT
+        // ============================================
+        
+        function openThemeModal() {
+            document.getElementById('themeModal').classList.add('active');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        }
+        
+        function closeThemeModal(event) {
+            // Only close if clicking the overlay, not the modal content
+            if (event && event.target.id !== 'themeModal') return;
+            
+            document.getElementById('themeModal').classList.remove('active');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+        
+        function selectTheme(themeName) {
+            console.log('Selecting theme:', themeName); // Debug log
+            
+            // Change the theme
+            document.body.setAttribute('data-theme', themeName);
+            
+            // Update active state on theme buttons
+            document.querySelectorAll('.theme-option').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-theme') === themeName) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Save preference
+            localStorage.setItem('overtime_theme', themeName);
+            
+            // Auto-close modal after selection with slight delay for visual feedback
+            setTimeout(() => {
+                const modal = document.getElementById('themeModal');
+                if (modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }, 400);
+        }
+        
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('overtime_theme') || 'emerald';
+            console.log('Loading saved theme:', savedTheme); // Debug log
+            
+            document.body.setAttribute('data-theme', savedTheme);
+            
+            // Update active state on all theme buttons
+            document.querySelectorAll('.theme-option').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-theme') === savedTheme) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // ============================================
+        // MONTH TABS FUNCTIONALITY
+        // ============================================
+        
+        function changeYear(delta) {
+            currentYear += delta;
+            updateYearDisplay();
+            loadAndDisplayEntries();
+        }
+        
+        function updateYearDisplay() {
+            document.getElementById('yearDisplay').textContent = currentYear;
+        }
+        
+        function initializeMonthTabs() {
+            const tabsContainer = document.getElementById('monthTabs');
+            const indicator = document.getElementById('tabIndicator');
+            
+            MONTHS.forEach((month, index) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'month-tab';
+                button.textContent = month.substring(0, 3);
+                button.dataset.month = index;
+                
+                if (index === currentMonth) {
+                    button.classList.add('active');
+                }
+                
+                button.addEventListener('click', () => selectMonth(index));
+                tabsContainer.appendChild(button);
+            });
+            
+            // Position indicator initially
+            updateTabIndicator();
+        }
+        
+        function selectMonth(monthIndex) {
+            currentMonth = monthIndex;
+            
+            // Update active states
+            document.querySelectorAll('.month-tab').forEach((tab, index) => {
+                if (index === monthIndex) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Animate indicator
+            updateTabIndicator();
+            
+            // Reload entries for selected month
+            loadAndDisplayEntries();
+        }
+        
+        function updateTabIndicator() {
+            const activeTab = document.querySelector('.month-tab.active');
+            const indicator = document.getElementById('tabIndicator');
+            
+            if (activeTab) {
+                const container = document.getElementById('monthTabs');
+                const containerRect = container.getBoundingClientRect();
+                const tabRect = activeTab.getBoundingClientRect();
+                
+                const left = tabRect.left - containerRect.left;
+                const width = tabRect.width;
+                
+                indicator.style.width = `${width}px`;
+                indicator.style.left = `${left}px`;
+            }
+        }
+        
+        // ============================================
+        // FORM HANDLING
+        // ============================================
+        
+        function toggleTravel() {
+            isTravelEnabled = !isTravelEnabled;
+            const toggleElement = document.getElementById('travelToggle');
+            const nightCounter = document.getElementById('nightCounter');
+            
+            if (isTravelEnabled) {
+                toggleElement.classList.add('active');
+                nightCounter.classList.add('visible');
+            } else {
+                toggleElement.classList.remove('active');
+                nightCounter.classList.remove('visible');
+            }
+        }
+        
+        function selectNights(nights) {
+            numberOfNights = nights;
+            
+            // Update active state on night buttons
+            document.querySelectorAll('.night-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (parseInt(btn.getAttribute('data-nights')) === nights) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        function setDefaultDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('entryDate').value = today;
+        }
+        
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            console.log('Form submitted!'); // Debug log
+            
+            const date = document.getElementById('entryDate').value;
+            const startTime = document.getElementById('startTime').value;
+            const endTime = document.getElementById('endTime').value;
+            const clientName = document.getElementById('clientName').value;
+            const description = document.getElementById('description').value;
+            
+            console.log('Form values:', { date, startTime, endTime, clientName, description }); // Debug log
+            
+            // Validate times
+            if (!validateTimes(startTime, endTime)) {
+                alert('End time must be after start time');
+                return;
+            }
+            
+            // Calculate hours
+            const hours = calculateHours(startTime, endTime);
+            
+            // Calculate earnings
+            const overtimeEarnings = hours * HOURLY_RATE;
+            const travelEarnings = isTravelEnabled ? (TRAVEL_RATE * numberOfNights) : 0;
+            const totalEarnings = overtimeEarnings + travelEarnings;
+            
+            // Create entry object
+            const entry = {
+                id: Date.now(),
+                date,
+                startTime,
+                endTime,
+                clientName,
+                description,
+                hours,
+                overtimeEarnings,
+                travelEarnings,
+                earnings: totalEarnings,
+                hasTravel: isTravelEnabled,
+                nights: isTravelEnabled ? numberOfNights : 0
+            };
+            
+            console.log('Entry created:', entry); // Debug log
+            
+            // Save entry
+            saveEntry(entry);
+            
+            // Add success animation
+            const addButton = document.getElementById('addButton');
+            addButton.classList.add('success-pulse');
+            setTimeout(() => addButton.classList.remove('success-pulse'), 300);
+            
+            // Reset form
+            document.getElementById('startTime').value = '';
+            document.getElementById('endTime').value = '';
+            document.getElementById('clientName').value = '';
+            document.getElementById('description').value = '';
+            
+            // Reset travel toggle
+            isTravelEnabled = false;
+            numberOfNights = 1;
+            document.getElementById('travelToggle').classList.remove('active');
+            document.getElementById('nightCounter').classList.remove('visible');
+            
+            // Reset night buttons
+            document.querySelectorAll('.night-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-nights') === '1') {
+                    btn.classList.add('active');
+                }
+            });
+            
+            setDefaultDate();
+            
+            // Refresh display
+            loadAndDisplayEntries();
+            
+            console.log('Form submission complete!'); // Debug log
+        }
+        
+        function validateTimes(start, end) {
+            const [startHour, startMin] = start.split(':').map(Number);
+            const [endHour, endMin] = end.split(':').map(Number);
+            
+            const startMinutes = startHour * 60 + startMin;
+            const endMinutes = endHour * 60 + endMin;
+            
+            return endMinutes > startMinutes;
+        }
+        
+        function calculateHours(start, end) {
+            const [startHour, startMin] = start.split(':').map(Number);
+            const [endHour, endMin] = end.split(':').map(Number);
+            
+            const startMinutes = startHour * 60 + startMin;
+            const endMinutes = endHour * 60 + endMin;
+            
+            const diffMinutes = endMinutes - startMinutes;
+            // Return exact hours without rounding - keep full precision
+            return diffMinutes / 60;
+        }
+        
+        // ============================================
+        // LOCAL STORAGE OPERATIONS
+        // ============================================
+        
+        function getStorageKey() {
+            return `overtime_${currentYear}_${currentMonth}`;
+        }
+        
+        function saveEntry(entry) {
+            const key = getStorageKey();
+            const entries = JSON.parse(localStorage.getItem(key) || '[]');
+            entries.push(entry);
+            localStorage.setItem(key, JSON.stringify(entries));
+        }
+        
+        function getEntries() {
+            const key = getStorageKey();
+            return JSON.parse(localStorage.getItem(key) || '[]');
+        }
+        
+        function deleteEntry(id) {
+            const key = getStorageKey();
+            let entries = JSON.parse(localStorage.getItem(key) || '[]');
+            entries = entries.filter(entry => entry.id !== id);
+            localStorage.setItem(key, JSON.stringify(entries));
+            loadAndDisplayEntries();
+        }
+        
+        // ============================================
+        // DISPLAY & RENDERING
+        // ============================================
+        
+        function loadAndDisplayEntries() {
+            const entries = getEntries();
+            displayEntries(entries);
+            updateTotals(entries);
+        }
+        
+        function displayEntries(entries) {
+            const container = document.getElementById('entriesList');
+            
+            if (entries.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📅</div>
+                        <p class="empty-state-title">No entries yet</p>
+                        <p class="empty-state-text">Add your first overtime entry above</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort entries by date (newest first)
+            const sortedEntries = entries.sort((a, b) => 
+                new Date(b.date) - new Date(a.date)
+            );
+            
+            container.innerHTML = sortedEntries.map(entry => `
+                <div class="entry-card">
+                    <div class="entry-header">
+                        <span class="entry-date">${formatDate(entry.date)}</span>
+                        <span class="entry-time">${formatTime24(entry.startTime)} - ${formatTime24(entry.endTime)}</span>
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap;">
+                        ${entry.clientName ? `
+                            <div class="client-badge">
+                                ${entry.clientName}
+                            </div>
+                        ` : ''}
+                        
+                        ${entry.hasTravel ? `
+                            <div class="travel-badge">
+                                🌙 ${entry.nights || 1} Night${(entry.nights || 1) > 1 ? 's' : ''} +€${entry.travelEarnings.toFixed(2)}
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    ${entry.description ? `
+                        <p class="entry-description line-clamp-2">${entry.description}</p>
+                    ` : ''}
+                    
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <div class="entry-footer">
+                            <span class="entry-hours">${formatHours(entry.hours)}</span>
+                            <span class="entry-earnings">€${entry.earnings.toFixed(2)}</span>
+                        </div>
+                        <button 
+                            onclick="deleteEntry(${entry.id})" 
+                            class="delete-btn"
+                            aria-label="Delete entry"
+                        >
+                            ×
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function formatTime24(timeString) {
+            // Time input values are already in 24-hour format (HH:mm)
+            // This function ensures proper display
+            return timeString;
+        }
+        
+        function formatHours(hours) {
+            // Show exact hours - if it's a whole number, show without decimals, otherwise show 2 decimals
+            if (hours % 1 === 0) {
+                return `${hours.toFixed(0)}h`;
+            } else {
+                return `${hours.toFixed(2)}h`;
+            }
+        }
+        
+        function updateTotals(entries) {
+            // Calculate totals
+            const totalHours = entries.reduce((sum, entry) => sum + entry.hours, 0);
+            const overtimeTotal = entries.reduce((sum, entry) => sum + (entry.overtimeEarnings || entry.hours * HOURLY_RATE), 0);
+            const travelTotal = entries.reduce((sum, entry) => sum + (entry.travelEarnings || 0), 0);
+            const grandTotal = overtimeTotal + travelTotal;
+            
+            // Update display - exact calculations with 2 decimal places
+            document.getElementById('totalHours').textContent = totalHours.toFixed(2);
+            document.getElementById('overtimeEarnings').textContent = `€${overtimeTotal.toFixed(2)}`;
+            document.getElementById('travelEarnings').textContent = `€${travelTotal.toFixed(2)}`;
+            document.getElementById('totalEarnings').textContent = `€${grandTotal.toFixed(2)}`;
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString + 'T00:00:00');
+            const day = date.getDate();
+            
+            // Greek month names
+            const monthNames = ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μάι', 'Ιουν', 
+                               'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ'];
+            const month = monthNames[date.getMonth()];
+            const year = date.getFullYear();
+            
+            // Show as: "14 Φεβ" or "14 Φεβ 2025" if different year
+            if (year === new Date().getFullYear()) {
+                return `${day} ${month}`;
+            }
+            return `${day} ${month} ${year}`;
+        }
+        
+        // ============================================
+        // RESPONSIVE HANDLING
+        // ============================================
+        
+        // Update indicator on resize
+        window.addEventListener('resize', () => {
+            updateTabIndicator();
+        });
+        
+        // Handle orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(updateTabIndicator, 100);
+        });
+    </script>
+</body>
+</html>
