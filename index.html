@@ -427,7 +427,7 @@
         /* Premium header with serif typography */
         .app-header {
             text-align: center;
-            margin-bottom: 36px;
+            margin-bottom: 40px;
             padding-top: 12px;
             padding-right: 110px;
             position: relative;
@@ -1187,9 +1187,9 @@
         .container {
             max-width: 480px;
             margin: 0 auto;
-            padding: 24px 28px;
-            padding-top: max(24px, env(safe-area-inset-top) + 8px);
-            padding-bottom: max(32px, env(safe-area-inset-bottom) + 16px);
+            padding: 32px 28px;
+            padding-top: max(32px, env(safe-area-inset-top) + 16px);
+            padding-bottom: max(40px, env(safe-area-inset-bottom) + 24px);
         }
         
         @media (min-width: 481px) {
@@ -1199,8 +1199,18 @@
             }
         }
         
+        @media (max-width: 480px) {
+            .card-spacing {
+                margin-bottom: 24px;
+            }
+            
+            .app-header {
+                margin-bottom: 32px;
+            }
+        }
+        
         .card-spacing {
-            margin-bottom: 20px;
+            margin-bottom: 28px;
         }
         
         .entries-list {
@@ -1349,7 +1359,7 @@
         <!-- ============================================
              ADD ENTRY FORM
              ============================================ -->
-        <div class="glass-card form-card card-spacing" style="padding: 32px 28px;">
+        <div class="glass-card form-card card-spacing" style="padding: 36px 28px;">
             <h2 class="form-title">Add Overtime Entry</h2>
             
             <form id="overtimeForm">
@@ -1442,7 +1452,7 @@
         <!-- ============================================
              ENTRIES LIST
              ============================================ -->
-        <div class="glass-card entries-section" style="padding: 28px 24px;">
+        <div class="glass-card entries-section" style="padding: 32px 28px;">
             <h2 class="section-title">Recent Entries</h2>
             <div id="entriesList" class="entries-list overflow-container" style="max-height: 500px;">
                 <!-- Entries will be dynamically inserted here -->
