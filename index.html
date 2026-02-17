@@ -1797,7 +1797,19 @@
             const [endHour, endMin] = end.split(':').map(Number);
             
             const startMinutes = startHour * 60 + startMin;
-            const endMinutes = endHour * 60 + endMin;
+            let endMinutes = endHour * 60 + endMin;
+            
+            // Handle overnight shifts (when end time is before or equal to start time)
+            // If end time is earlier, assume it's the next day
+            if (endMinutes <= startMinutes) {
+                endMinutes += 1440; // Add 24 hours (1440 minutes)
+            }
+            
+            // Check if shift is reasonable (not more than 24 hours)
+            const diffMinutes = endMinutes - startMinutes;
+            if (diffMinutes > 1440) {
+                return false;
+            }
             
             return endMinutes > startMinutes;
         }
@@ -1807,7 +1819,13 @@
             const [endHour, endMin] = end.split(':').map(Number);
             
             const startMinutes = startHour * 60 + startMin;
-            const endMinutes = endHour * 60 + endMin;
+            let endMinutes = endHour * 60 + endMin;
+            
+            // Handle overnight shifts (crossing midnight)
+            // If end time is before or equal to start time, assume next day
+            if (endMinutes <= startMinutes) {
+                endMinutes += 1440; // Add 24 hours (1440 minutes)
+            }
             
             const diffMinutes = endMinutes - startMinutes;
             // Return exact hours without rounding - keep full precision
