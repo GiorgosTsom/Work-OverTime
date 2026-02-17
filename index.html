@@ -1172,6 +1172,45 @@
             letter-spacing: -0.01em;
         }
         
+        /* Hourly rate hover effect */
+        #hourlyRateDisplay {
+            transition: all var(--transition-base);
+        }
+        
+        #hourlyRateDisplay:hover {
+            color: var(--color-primary);
+            transform: scale(1.05);
+        }
+        
+        /* Photo upload buttons */
+        .photo-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 16px;
+            background: white;
+            border: 1.5px solid rgba(59, 130, 246, 0.3);
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            font-weight: 600;
+            color: #2563eb;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-xs);
+        }
+        
+        .photo-btn:hover {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: #2563eb;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .photo-btn:active {
+            transform: translateY(0);
+        }
+        
         /* Success animation */
         @keyframes successPulse {
             0% { transform: scale(1); }
@@ -1357,7 +1396,7 @@
                     <div class="stat-divider"></div>
                     <div class="stat-item-small">
                         <p class="stat-label">Rate</p>
-                        <p class="stat-value-small">€10/hr</p>
+                        <p class="stat-value-small" id="hourlyRateDisplay" onclick="editHourlyRate()" style="cursor: pointer;">€10/hr</p>
                     </div>
                 </div>
         </div>
@@ -1367,6 +1406,43 @@
              ============================================ -->
         <div class="glass-card form-card card-spacing" style="padding: 36px 28px;">
             <h2 class="form-title">Add Overtime Entry</h2>
+            
+            <!-- AI Photo Upload Section -->
+            <div style="margin-bottom: 24px; padding: 20px; background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(37, 99, 235, 0.06) 100%); border: 2px dashed rgba(59, 130, 246, 0.3); border-radius: var(--radius-md);">
+                <div style="text-align: center; margin-bottom: 16px;">
+                    <div style="font-size: 13px; font-weight: 700; color: var(--color-text-primary); margin-bottom: 8px;">
+                        📸 AI Photo Extract (Beta)
+                    </div>
+                    <div style="font-size: 11px; color: var(--color-text-secondary); line-height: 1.5;">
+                        Take a photo or upload notes - AI will auto-fill the form!
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <button type="button" onclick="openCamera()" class="photo-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                        Take Photo
+                    </button>
+                    <button type="button" onclick="document.getElementById('photoUpload').click()" class="photo-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        Upload Photo
+                    </button>
+                </div>
+                
+                <input type="file" id="photoUpload" accept="image/*" style="display: none;" onchange="processPhoto(event)">
+                
+                <div id="photoPreview" style="display: none; margin-top: 16px; text-align: center;">
+                    <img id="previewImage" style="max-width: 100%; max-height: 200px; border-radius: var(--radius-md); margin-bottom: 12px;">
+                    <div id="extractionStatus" style="font-size: 12px; color: var(--color-text-secondary);"></div>
+                </div>
+            </div>
             
             <form id="overtimeForm">
                 <div class="form-group">
@@ -1479,13 +1555,180 @@
             'July', 'August', 'September', 'October', 'November', 'December'
         ];
         
-        const HOURLY_RATE = 10; // €10 per hour
         const TRAVEL_RATE = 50; // €50 per night
         
+        let HOURLY_RATE = 10; // Default €10 per hour - will be loaded from storage
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
         let isTravelEnabled = false; // Track travel toggle state
         let numberOfNights = 1; // Default to 1 night
+        
+        // ============================================
+        // AI PHOTO EXTRACTION
+        // ============================================
+        
+        function openCamera() {
+            const input = document.getElementById('photoUpload');
+            // Request camera specifically
+            input.setAttribute('capture', 'environment');
+            input.click();
+        }
+        
+        async function processPhoto(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Show preview
+            const preview = document.getElementById('photoPreview');
+            const previewImage = document.getElementById('previewImage');
+            const statusDiv = document.getElementById('extractionStatus');
+            
+            previewImage.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+            statusDiv.textContent = '🔄 Analyzing photo with AI...';
+            statusDiv.style.color = '#2563eb';
+            
+            try {
+                // Convert image to base64
+                const base64Image = await fileToBase64(file);
+                
+                // Extract overtime info using AI
+                const extractedData = await extractOvertimeData(base64Image, file.type);
+                
+                if (extractedData) {
+                    // Auto-fill the form
+                    fillFormWithData(extractedData);
+                    statusDiv.textContent = '✅ Form auto-filled! Review and click Add Entry';
+                    statusDiv.style.color = '#10b981';
+                } else {
+                    statusDiv.textContent = '⚠️ Could not extract data. Please fill manually.';
+                    statusDiv.style.color = '#f59e0b';
+                }
+            } catch (error) {
+                console.error('Photo processing error:', error);
+                statusDiv.textContent = '❌ Error processing photo. Please fill manually.';
+                statusDiv.style.color = '#ef4444';
+            }
+        }
+        
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        async function extractOvertimeData(base64Image, mediaType) {
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1000,
+                        messages: [{
+                            role: 'user',
+                            content: [
+                                {
+                                    type: 'image',
+                                    source: {
+                                        type: 'base64',
+                                        media_type: mediaType,
+                                        data: base64Image
+                                    }
+                                },
+                                {
+                                    type: 'text',
+                                    text: `Analyze this photo and extract overtime work information. Look for:
+- Date (format: YYYY-MM-DD)
+- Start time (24-hour format: HH:MM)
+- End time (24-hour format: HH:MM)
+- Client or partner name
+- Work description
+- Any mention of overnight travel (yes/no)
+- Number of nights if travel mentioned
+
+Respond ONLY with a JSON object, no markdown formatting:
+{
+  "date": "YYYY-MM-DD",
+  "startTime": "HH:MM",
+  "endTime": "HH:MM",
+  "clientName": "client name",
+  "description": "work description",
+  "hasTravel": false,
+  "nights": 0
+}
+
+If information is missing or unclear, use null for that field.`
+                                }
+                            ]
+                        }]
+                    })
+                });
+                
+                const data = await response.json();
+                console.log('AI Response:', data);
+                
+                // Extract text from response
+                const textContent = data.content
+                    .filter(item => item.type === 'text')
+                    .map(item => item.text)
+                    .join('');
+                
+                // Parse JSON from response
+                const cleanText = textContent.replace(/```json|```/g, '').trim();
+                const extracted = JSON.parse(cleanText);
+                
+                return extracted;
+            } catch (error) {
+                console.error('AI extraction error:', error);
+                return null;
+            }
+        }
+        
+        function fillFormWithData(data) {
+            // Fill date
+            if (data.date) {
+                document.getElementById('entryDate').value = data.date;
+            }
+            
+            // Fill times
+            if (data.startTime) {
+                document.getElementById('startTime').value = data.startTime;
+            }
+            if (data.endTime) {
+                document.getElementById('endTime').value = data.endTime;
+            }
+            
+            // Fill client name
+            if (data.clientName) {
+                document.getElementById('clientName').value = data.clientName;
+            }
+            
+            // Fill description
+            if (data.description) {
+                document.getElementById('description').value = data.description;
+            }
+            
+            // Handle travel
+            if (data.hasTravel) {
+                isTravelEnabled = true;
+                document.getElementById('travelToggle').classList.add('active');
+                document.getElementById('nightCounter').classList.add('visible');
+                
+                if (data.nights && data.nights > 0 && data.nights <= 5) {
+                    numberOfNights = data.nights;
+                    selectNights(data.nights);
+                }
+            }
+            
+            // Scroll to form for review
+            document.getElementById('overtimeForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         
         // ============================================
         // INITIALIZATION
@@ -1517,11 +1760,46 @@
             }
         }
         
+        // Hourly Rate Management
+        function loadHourlyRate() {
+            const savedRate = localStorage.getItem('overtime_hourly_rate');
+            if (savedRate) {
+                HOURLY_RATE = parseFloat(savedRate);
+            } else {
+                // First time - prompt for rate
+                setTimeout(() => {
+                    const rate = prompt('Welcome! Please enter your hourly overtime rate (in €):', '10');
+                    if (rate && !isNaN(rate) && parseFloat(rate) > 0) {
+                        HOURLY_RATE = parseFloat(rate);
+                        localStorage.setItem('overtime_hourly_rate', HOURLY_RATE);
+                    }
+                }, 1000);
+            }
+            updateRateDisplay();
+        }
+        
+        function editHourlyRate() {
+            const currentRate = HOURLY_RATE;
+            const newRate = prompt('Change your hourly rate (in €):', currentRate);
+            if (newRate && !isNaN(newRate) && parseFloat(newRate) > 0) {
+                HOURLY_RATE = parseFloat(newRate);
+                localStorage.setItem('overtime_hourly_rate', HOURLY_RATE);
+                updateRateDisplay();
+                // Reload entries to recalculate with new rate if needed
+                loadAndDisplayEntries();
+            }
+        }
+        
+        function updateRateDisplay() {
+            document.getElementById('hourlyRateDisplay').textContent = `€${HOURLY_RATE}/hr`;
+        }
+        
         document.addEventListener('DOMContentLoaded', () => {
             console.log('Initializing app...'); // Debug log
             
             try {
                 loadOwnerName();
+                loadHourlyRate();
                 loadTheme();
                 initializeMonthTabs();
                 setDefaultDate();
