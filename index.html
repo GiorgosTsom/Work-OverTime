@@ -1130,6 +1130,12 @@
             margin-top: 6px;
             margin-bottom: 2px;
             letter-spacing: 0.01em;
+            transition: all var(--transition-base);
+        }
+        
+        .app-owner:hover {
+            color: var(--color-primary);
+            transform: scale(1.02);
         }
         
         /* Travel badge in entry cards */
@@ -1296,7 +1302,7 @@
              ============================================ -->
         <header class="app-header">
             <h1 class="app-title">Overtime</h1>
-            <p class="app-owner">George Tsom</p>
+            <p class="app-owner" id="ownerName" onclick="editOwnerName()" style="cursor: pointer;">George Tsom</p>
             <p class="app-subtitle">Track your extra hours with elegance</p>
         </header>
         
@@ -1485,10 +1491,37 @@
         // INITIALIZATION
         // ============================================
         
+        // Owner Name Management
+        function loadOwnerName() {
+            const savedName = localStorage.getItem('overtime_owner_name');
+            if (savedName) {
+                document.getElementById('ownerName').textContent = savedName;
+            } else {
+                // First time use - prompt for name
+                setTimeout(() => {
+                    const name = prompt('Welcome! Please enter your name:', 'Your Name');
+                    if (name && name.trim() !== '' && name !== 'Your Name') {
+                        localStorage.setItem('overtime_owner_name', name.trim());
+                        document.getElementById('ownerName').textContent = name.trim();
+                    }
+                }, 500);
+            }
+        }
+        
+        function editOwnerName() {
+            const currentName = document.getElementById('ownerName').textContent;
+            const newName = prompt('Change your name:', currentName);
+            if (newName && newName.trim() !== '' && newName !== currentName) {
+                localStorage.setItem('overtime_owner_name', newName.trim());
+                document.getElementById('ownerName').textContent = newName.trim();
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', () => {
             console.log('Initializing app...'); // Debug log
             
             try {
+                loadOwnerName();
                 loadTheme();
                 initializeMonthTabs();
                 setDefaultDate();
